@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import AdaptiveLogo from '@/components/AdaptiveLogo';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { startNewInterestAttempt, submitInterest } from '@/lib/core-intake';
 
 const StreamlinedHero = () => {
   const { toast } = useToast();
@@ -64,29 +65,41 @@ const StreamlinedHero = () => {
 
   const handleQuickSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      toast({ title: 'Email required', description: 'Please enter a valid email.', variant: 'destructive' });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      toast({ title: 'Email required', description: 'Please enter a valid email address.', variant: 'destructive' });
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          source: 'hero_quick_signup',
-          referrer: typeof document !== 'undefined' ? document.referrer : '',
-        }),
+      const result = await submitInterest({
+        email: email.trim(),
+        source: 'hero_quick_signup',
       });
 
-      if (!res.ok) throw new Error('Signup failed');
+      if (result.ok === false) {
+        if (result.code === 'payload_mismatch') {
+          startNewInterestAttempt();
+          const retryResult = await submitInterest({
+            email: email.trim(),
+            source: 'hero_quick_signup',
+          });
+          if (retryResult.ok === false) {
+            throw new Error(retryResult.error);
+          }
+
+          toast({ title: "You're on the list!", description: 'We will notify you at launch.' });
+          setEmail('');
+          return;
+        }
+        throw new Error(result.error);
+      }
 
       toast({ title: "You're on the list!", description: 'We will notify you at launch.' });
       setEmail('');
-    } catch (err) {
-      toast({ title: 'Signup failed', description: 'Please try again.', variant: 'destructive' });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Please try again.';
+      toast({ title: 'Signup failed', description: msg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -130,113 +143,58 @@ const StreamlinedHero = () => {
             {/* Main Headline - Enhanced Mobile Typography */}
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Discover Thailand with Local Companions
+                Experience Thailand with Local Guides
               </h1>
-              
-              {/* Rotating Vibes Text - Enhanced Mobile */}
-              <div className="flex items-center justify-center lg:justify-start space-x-2 sm:space-x-3">
-                <span className="text-lg sm:text-xl lg:text-2xl text-contrast-secondary font-medium">
-                  Find your
-                </span>
-                <div className="relative h-8 sm:h-10 lg:h-12 overflow-hidden">
-                  <div 
-                    className="absolute inset-0 transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateY(-${currentVibeIndex * 100}%)` }}
-                  >
-                    {vibes.map((vibe, index) => (
-                      <div 
-                        key={vibe}
-                        className="h-8 sm:h-10 lg:h-12 flex items-center text-lg sm:text-xl lg:text-2xl font-bold gradient-text"
-                      >
-                        {vibe}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <p className="text-contrast-secondary text-lg sm:text-xl max-w-xl">
+                Discover local culture, food, and adventures. Join early access while app testing is by invitation.
+              </p>
             </div>
 
-            {/* Subtitle - Enhanced Mobile */}
-            <p className="text-base sm:text-lg lg:text-xl text-contrast-secondary font-inter leading-relaxed max-w-xl mx-auto lg:mx-0">
-              Connect with verified local companions for authentic adventures, cultural immersion, and unforgettable memories across Thailand.
-            </p>
+            {/* Vibe Rotator */}
+            <div className="flex items-center justify-center lg:justify-start space-x-3 text-sm font-semibold tracking-wider text-primary">
+              <span className="text-muted-foreground uppercase text-xs">Explore by vibe:</span>
+              <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+                {vibes[currentVibeIndex]}
+              </span>
+            </div>
 
-            {/* Enhanced Mobile CTA Section */}
-            <div className="space-y-4 sm:space-y-6">
-              {/* Quick Signup Form - Mobile Optimized */}
-              <form onSubmit={handleQuickSignup} className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto lg:mx-0">
+            {/* Quick Email Signup Form */}
+            <form onSubmit={handleQuickSignup} className="space-y-3 max-w-md mx-auto lg:mx-0">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   type="email"
-                  placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 sm:h-14 text-base flex-1 glass-light"
+                  placeholder="Enter your email for early access"
+                  className="bg-background/80 backdrop-blur-sm"
                   required
                 />
-                <Button 
-                  type="submit" 
-                  className="btn-primary h-12 sm:h-14 px-6 sm:px-8 text-base font-semibold whitespace-nowrap"
-                  disabled={loading}
-                >
-                  {loading ? 'Joining...' : 'Join Waitlist'}
+                <Button type="submit" disabled={loading} className="shrink-0">
+                  {loading ? 'Joining...' : 'Get Early Access'}
                 </Button>
-              </form>
-
-              {/* Secondary Actions - Enhanced Mobile Layout */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm text-contrast-secondary">
-                <Link 
-                  to="/download" 
-                  className="flex items-center space-x-2 hover:text-primary transition-colors duration-200"
-                >
-                  <span>📱</span>
-                  <span>Download App</span>
-                </Link>
-                <Link 
-                  to="#explore" 
-                  className="flex items-center space-x-2 hover:text-primary transition-colors duration-200"
-                >
-                  <span>🗺️</span>
-                  <span>Explore Experiences</span>
-                </Link>
-                <Link 
-                  to="#companion-stories" 
-                  className="flex items-center space-x-2 hover:text-primary transition-colors duration-200"
-                >
-                  <span>💬</span>
-                  <span>Read Stories</span>
-                </Link>
               </div>
+            </form>
 
-              {/* Trust Indicators - Mobile Optimized */}
-              <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-white/10 max-w-md mx-auto lg:mx-0">
-                <div className="text-center">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">500+</div>
-                  <div className="text-xs sm:text-sm text-contrast-secondary">Local Guides</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">50+</div>
-                  <div className="text-xs sm:text-sm text-contrast-secondary">Thai Cities</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">24/7</div>
-                  <div className="text-xs sm:text-sm text-contrast-secondary">Support</div>
-                </div>
-              </div>
+            {/* Direct Links */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+              <Button asChild variant="outline" size="sm">
+                <Link to="/apply">Become a Guide</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/download">Get Mobile App</Link>
+              </Button>
             </div>
           </div>
 
-          {/* Right Column - Enhanced Mobile Phone Mockup */}
+          {/* Right Column - Phone Preview */}
           <div className="flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative w-64 sm:w-80 lg:w-96 h-auto">
-              {/* Phone Container with Enhanced Mobile Responsiveness */}
               <div 
                 ref={phoneRef}
-                className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-[2rem] sm:rounded-[3rem] p-2 sm:p-3 shadow-2xl will-change-transform hardware-accelerated"
+                className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-[2rem] sm:rounded-[3rem] p-2 sm:p-3 shadow-2xl will-change-transform"
                 style={{ aspectRatio: '9/19.5' }}
               >
-                {/* Screen Content - Mobile Optimized */}
                 <div className="bg-gradient-to-br from-primary/90 to-secondary/90 rounded-[1.5rem] sm:rounded-[2.5rem] h-full overflow-hidden relative">
-                  {/* Status Bar */}
                   <div className="flex justify-between items-center px-4 sm:px-6 py-2 sm:py-3 text-white text-xs sm:text-sm">
                     <span>9:41</span>
                     <div className="flex space-x-1">
@@ -246,15 +204,12 @@ const StreamlinedHero = () => {
                     </div>
                   </div>
 
-                  {/* App Content - Enhanced Mobile Preview */}
                   <div className="px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-                    {/* Header */}
                     <div className="text-center text-white">
                       <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Tirak</h3>
                       <p className="text-xs sm:text-sm opacity-80">Your Thailand Adventure Awaits</p>
                     </div>
 
-                    {/* Feature Cards - Mobile Optimized */}
                     <div className="space-y-3 sm:space-y-4">
                       {[
                         { icon: '🏛️', title: 'Cultural Tours', desc: 'Temple visits & traditions' },
@@ -263,8 +218,7 @@ const StreamlinedHero = () => {
                       ].map((item, index) => (
                         <div 
                           key={index}
-                          className="bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 flex items-center space-x-3 sm:space-x-4 animate-drift-up"
-                          style={{ animationDelay: `${index * 0.2}s` }}
+                          className="bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 flex items-center space-x-3 sm:space-x-4"
                         >
                           <div className="text-xl sm:text-2xl">{item.icon}</div>
                           <div className="flex-1 min-w-0">
@@ -275,33 +229,16 @@ const StreamlinedHero = () => {
                       ))}
                     </div>
 
-                    {/* CTA Button in Phone */}
                     <div className="pt-2 sm:pt-4">
-                      <div className="bg-white text-primary rounded-lg sm:rounded-xl py-2 sm:py-3 px-4 sm:px-6 text-center">
-                        <span className="font-semibold text-sm sm:text-base">Find Your Guide</span>
-                      </div>
+                      <Link to="/download" className="block bg-white text-primary rounded-lg sm:rounded-xl py-2 sm:py-3 px-4 sm:px-6 text-center font-semibold text-sm sm:text-base">
+                        Get the App
+                      </Link>
                     </div>
                   </div>
                 </div>
-
-                {/* Phone Highlights */}
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 bg-gray-700 rounded-full"></div>
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 sm:w-16 h-1 bg-gray-700 rounded-full"></div>
               </div>
-
-              {/* Floating Elements - Mobile Optimized */}
-              <div className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 w-8 h-8 sm:w-12 sm:h-12 bg-primary/20 rounded-full animate-pulse-glow"></div>
-              <div className="absolute -bottom-6 -left-4 sm:-bottom-8 sm:-left-6 w-6 h-6 sm:w-10 sm:h-10 bg-secondary/20 rounded-full animate-float"></div>
-              <div className="absolute top-1/3 -left-6 sm:-left-8 w-4 h-4 sm:w-6 sm:h-6 bg-accent/20 rounded-full animate-drift-up"></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator - Enhanced Mobile */}
-      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 sm:w-8 sm:h-12 border-2 border-white/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 sm:w-1.5 sm:h-4 bg-white/50 rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
     </div>

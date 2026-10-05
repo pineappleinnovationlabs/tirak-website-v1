@@ -3,26 +3,26 @@ import { useEffect, useRef, useState } from 'react';
 const steps = [
   {
     number: '01',
-    title: 'Pick a Companion',
-    description: 'Browse verified local guides and find the perfect match for your adventure.',
+    title: 'Download the App',
+    description: 'Get Tirak to explore local guides and experiences when app access is available.',
     icon: '👥',
   },
   {
     number: '02',
-    title: 'Choose a Category',
-    description: 'Select from culture, adventure, wellness, nightlife, and more experiences.',
+    title: 'Join the Waitlist',
+    description: 'Share your contact details so Tirak can notify you when your access window opens.',
     icon: '🎯',
   },
   {
     number: '03',
-    title: 'Set Time & Meeting Point',
-    description: 'Coordinate your schedule and choose a convenient meeting location.',
+    title: 'Plan Your Experience',
+    description: 'Choose an experience, date, and meeting point that work for you.',
     icon: '📍',
   },
   {
     number: '04',
-    title: 'Enjoy Your Experience!',
-    description: 'Discover authentic Thailand with your personal local guide.',
+    title: 'Explore Together',
+    description: 'Discover Thailand together with your local guide.',
     icon: '✨',
   },
 ];
@@ -68,7 +68,7 @@ const HowItWorks = () => {
             </span>
           </h2>
           <p className="text-xl text-muted-foreground font-inter">
-            Start your authentic Thai adventure in just 4 simple steps
+            Plan your local experience with Tirak
           </p>
         </div>
 

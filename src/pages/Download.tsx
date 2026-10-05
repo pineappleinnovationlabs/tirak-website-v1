@@ -12,9 +12,11 @@ const PLAY_STORE_URL = "https://expo.dev/accounts/thoughtseedlabs/projects/tirak
 type Platform = "ios" | "android" | "other";
 
 const detectPlatform = (): Platform => {
-  const ua = navigator.userAgent || (navigator as any).vendor || (window as any).opera || "";
+  const nav = typeof navigator !== "undefined" ? navigator : null;
+  const win = typeof window !== "undefined" ? (window as unknown as { opera?: string }) : null;
+  const ua = (nav?.userAgent || nav?.vendor || win?.opera || "");
   const isAndroid = /Android/i.test(ua);
-  const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1);
+  const isIOS = /iPhone|iPad|iPod/i.test(ua) || (nav?.platform === "MacIntel" && (nav?.maxTouchPoints ?? 0) > 1);
   if (isIOS) return "ios";
   if (isAndroid) return "android";
   return "other";
@@ -28,124 +30,89 @@ const Download = () => {
 
   const overridePlatform = useMemo<Platform>(() => {
     const p = params.get("platform");
-    if (p === "ios" || p === "android" || p === "other") return p;
+    if (p === "ios" || p === "android") return p;
     return "other";
   }, [params]);
 
   const platform = useMemo<Platform>(() => {
-    return overridePlatform !== "other" ? overridePlatform : detectPlatform();
+    if (overridePlatform !== "other") return overridePlatform;
+    return detectPlatform();
   }, [overridePlatform]);
 
   useEffect(() => {
-    const iosUrl = APP_STORE_URL;
-    const androidUrl = PLAY_STORE_URL;
-    let target: string | null = null;
+    const auto = params.get("auto");
+    if (auto === "0" || auto === "false" || redirected) return;
 
-    if (platform === "ios" && iosUrl) target = iosUrl;
-    if (platform === "android" && androidUrl) target = androidUrl;
-
-    // Auto-redirect after a short delay; always show the page UI for fallback
-    const t = setTimeout(() => {
-      if (target && !redirected) {
-        setRedirected(true);
-        window.location.href = target;
-      }
-    }, 800);
-
-    return () => clearTimeout(t);
-  }, [platform, redirected]);
-
-  const platformLabel = platform === "ios" ? "iOS" : platform === "android" ? "Android" : "your device";
+    if (platform === "ios") {
+      setRedirected(true);
+      window.location.href = APP_STORE_URL;
+    } else if (platform === "android") {
+      setRedirected(true);
+      window.location.href = PLAY_STORE_URL;
+    }
+  }, [platform, params, redirected]);
 
   return (
-    <>
-      <SEO 
-        title="Download Tirak - Dream Journal & Lucid Dreaming App"
-        description="Download Tirak for iOS and Android. Start your lucid dreaming journey with our comprehensive dream journal and reality check features."
+    <main className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="Download Tirak App — Available on iOS & Android"
+        description="Get the Tirak app to discover local guides and experiences. Join the early access list while testing is by invitation."
       />
-      
-      <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-900" style={{ marginTop: 'clamp(5em, 10vh, 9em)' }}>
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="glass-card p-8 md:p-12">
-              {/* Header Section */}
-              <div className="text-center mb-12">
-                <div className="inline-block bg-gradient-to-r from-accent-400 to-secondary-400 bg-clip-text text-transparent mb-4">
-                  <h1 className="text-4xl md:text-5xl font-inter font-bold">
-                    Download Tirak
-                  </h1>
-                </div>
-                <p className="text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
-                  Start your tirak journey today. Available on iOS and Android.
-                </p>
-                <p className="text-lg text-text-secondary/80 mt-2">
-                  We detected {platformLabel}. If supported, you will be redirected automatically.
-                </p>
-              </div>
 
-              {/* Download Links Section */}
-              <div className="space-y-8">
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                  <a
-                    href={APP_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group glass-card hover-lift hover-glow transition-all duration-300 hover:scale-105 p-4 rounded-2xl focus-ring will-change-transform hardware-accelerated"
-                  >
-                    <img
-                      src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                      alt="Download on App Store"
-                      className="h-14 w-auto rounded-xl"
-                    />
-                  </a>
+      <section className="flex-1 flex items-center justify-center py-16 px-4">
+        <div className="w-full max-w-xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 text-primary mb-2">
+            <Smartphone className="w-8 h-8" />
+          </div>
 
-                  <a
-                    href={PLAY_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group glass-card hover-lift hover-glow transition-all duration-300 hover:scale-105 p-4 rounded-2xl focus-ring will-change-transform hardware-accelerated"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                      alt="Get it on Google Play"
-                      className="h-14 w-auto rounded-xl"
-                    />
-                  </a>
-                </div>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-contrast">
+            Get the Tirak App
+          </h1>
 
-              
+          <p className="text-contrast-secondary text-base sm:text-lg">
+            Install Tirak to follow the staged rollout, access discovery previews, and receive updates when approved companion inventory becomes available in-app.
+          </p>
 
-                {/* Call to Action */}
-                <div className="text-center mt-8">
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="rounded-xl group inline-flex items-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-elevated focus-ring"
-                  >
-                    <Link to="/" aria-label="Explore Trial">
-                      Explore Trial
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="transition-transform duration-300 group-hover:translate-x-0.5"
-                      >
-                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <Button
+              asChild
+              size="lg"
+              className="w-full justify-center"
+              variant={platform === "ios" ? "default" : "outline"}
+            >
+              <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+                <DownloadIcon className="w-4 h-4 mr-2" />
+                Download for iOS (TestFlight)
+              </a>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              className="w-full justify-center"
+              variant={platform === "android" ? "default" : "outline"}
+            >
+              <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
+                <DownloadIcon className="w-4 h-4 mr-2" />
+                Download for Android (APK)
+              </a>
+            </Button>
+          </div>
+
+          <div className="pt-4 text-xs text-contrast-secondary space-y-1">
+            <p>
+              Direct install link not opening? Choose your platform above, contact support, or open the{" "}
+              <Link to="/apply" className="underline underline-offset-4 hover:text-foreground">
+                guide application
+              </Link>
+              if you are onboarding as a local operator.
+            </p>
           </div>
         </div>
-        
-        <Footer />
-      </div>
-    </>
+      </section>
+
+      <Footer />
+    </main>
   );
 };
 

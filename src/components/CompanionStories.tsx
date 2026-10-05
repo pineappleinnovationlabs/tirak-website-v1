@@ -1,33 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const stories = [
+const rolloutNotes = [
   {
     id: 1,
-    quote: "Pim was the best local companion – she showed me hidden temples I'd never find on my own!",
-    author: "Maria",
-    country: "Spain",
-    flag: "🇪🇸",
+    quote: 'Explore Thailand through the knowledge and interests of local guides.',
+    title: 'Discovery is app-first',
+    detail: 'Join early access while app testing is by invitation.',
   },
   {
     id: 2,
-    quote: "Kamon took me to the most incredible street food spots. Every meal was an adventure!",
-    author: "James",
-    country: "Australia",
-    flag: "🇦🇺",
+    quote: 'Choose experiences that match your interests, schedule, and travel plans.',
+    title: 'Find Your Local Experience',
+    detail: 'Discover experiences that match your interests in the Tirak app.',
   },
   {
     id: 3,
-    quote: "Thanks to Malee, I discovered parts of Phuket that felt like paradise. Unforgettable experience!",
-    author: "Sophie",
-    country: "France",
-    flag: "🇫🇷",
+    quote: 'Apply to guide travelers through the places and experiences you know best.',
+    title: 'Guides can apply now',
+    detail: 'Local operators can submit services, schedules, and evidence before public marketplace release.',
   },
   {
     id: 4,
-    quote: "Somchai's knowledge of Thai culture opened my eyes to so many beautiful traditions.",
-    author: "Alex",
-    country: "Germany",
-    flag: "🇩🇪",
+    quote: 'Apply as a guide, activate your approved account, and verify your profile before publishing.',
+    title: 'Launch claims stay grounded',
+    detail: 'Guide applications are open. App testing is currently by invitation.',
   },
 ];
 
@@ -36,7 +33,7 @@ const CompanionStories = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentStory((prev) => (prev + 1) % stories.length);
+      setCurrentStory((prev) => (prev + 1) % rolloutNotes.length);
     }, 4000);
 
     return () => clearInterval(timer);
@@ -48,13 +45,13 @@ const CompanionStories = () => {
         {/* Enhanced Header Section with Better Mobile Spacing */}
         <div className="text-center mb-12 sm:mb-16 lg:mb-20 space-y-4 sm:space-y-6">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-inter text-contrast leading-tight">
-            Companion
+            About
             <span className="block sm:inline gradient-text sm:ml-4">
-              Stories
+              Tirak
             </span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-contrast-secondary font-inter leading-relaxed max-w-2xl mx-auto px-4">
-            Real experiences from travelers like you
+            Local knowledge, shared experiences, and travel at your own pace
           </p>
         </div>
 
@@ -63,10 +60,10 @@ const CompanionStories = () => {
           <div className="glass-card p-6 sm:p-8 md:p-12 lg:p-16 text-center relative overflow-hidden">
             {/* Enhanced Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/3 to-accent/5 rounded-2xl sm:rounded-3xl" />
-            
+
             {/* Subtle Pattern Overlay */}
             <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]" />
-            
+
             <div className="relative z-10">
               {/* Enhanced Quote Section with Better Mobile Typography */}
               <div className="mb-6 sm:mb-8 lg:mb-12">
@@ -74,20 +71,19 @@ const CompanionStories = () => {
                 <div className="text-4xl sm:text-5xl lg:text-6xl text-primary/20 mb-4 sm:mb-6">
                   "
                 </div>
-                
+
                 <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-inter text-contrast leading-relaxed mb-6 sm:mb-8 lg:mb-12 italic font-light px-2 sm:px-4">
-                  {stories[currentStory].quote}
+                  {rolloutNotes[currentStory].quote}
                 </p>
-                
+
                 {/* Enhanced Author Section with Better Mobile Layout */}
                 <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-                  <span className="text-3xl sm:text-4xl">{stories[currentStory].flag}</span>
                   <div className="text-center sm:text-left">
                     <p className="text-base sm:text-lg lg:text-xl font-semibold text-contrast">
-                      {stories[currentStory].author}
+                      {rolloutNotes[currentStory].title}
                     </p>
                     <p className="text-sm sm:text-base text-contrast-secondary">
-                      {stories[currentStory].country}
+                      {rolloutNotes[currentStory].detail}
                     </p>
                   </div>
                 </div>
@@ -95,7 +91,7 @@ const CompanionStories = () => {
 
               {/* Enhanced Story Indicators with Better Mobile Spacing */}
               <div className="flex justify-center space-x-3 sm:space-x-4 mt-8 sm:mt-12">
-                {stories.map((_, index) => (
+                {rolloutNotes.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentStory(index)}
@@ -112,10 +108,10 @@ const CompanionStories = () => {
               {/* Enhanced Progress Bar */}
               <div className="mt-6 sm:mt-8 max-w-xs mx-auto">
                 <div className="h-1 bg-muted-foreground/20 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-4000 ease-linear"
                     style={{
-                      width: `${((currentStory + 1) / stories.length) * 100}%`,
+                      width: `${((currentStory + 1) / rolloutNotes.length) * 100}%`,
                     }}
                   />
                 </div>
@@ -132,11 +128,11 @@ const CompanionStories = () => {
         {/* Enhanced Call-to-Action Section */}
         <div className="text-center mt-12 sm:mt-16 lg:mt-20">
           <p className="text-sm sm:text-base text-contrast-secondary mb-4 sm:mb-6 max-w-md mx-auto">
-            Ready to create your own unforgettable story in Thailand?
+            Want to explore Thailand with a local guide?
           </p>
-          <button className="btn-primary px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl">
-            Find Your Companion
-          </button>
+          <Link to="/download" className="btn-primary inline-flex px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl">
+            Get the App
+          </Link>
         </div>
       </div>
     </section>

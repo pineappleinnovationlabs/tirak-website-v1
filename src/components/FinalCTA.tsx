@@ -39,19 +39,19 @@ const FinalCTA = () => {
           <div className="glass-card p-6 sm:p-8 lg:p-12 xl:p-16 text-center relative overflow-hidden rounded-2xl sm:rounded-3xl">
             {/* Enhanced Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/10 rounded-2xl sm:rounded-3xl" aria-hidden="true" />
-            
+
             {/* Animated Background Particles */}
             <div className="absolute inset-0 overflow-hidden rounded-2xl sm:rounded-3xl" aria-hidden="true">
               <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/20 rounded-full animate-float" />
               <div className="absolute top-3/4 right-1/4 w-3 h-3 bg-secondary/20 rounded-full animate-float delay-1000" />
               <div className="absolute bottom-1/4 left-3/4 w-1.5 h-1.5 bg-primary/30 rounded-full animate-float delay-500" />
             </div>
-            
+
             <div className="relative z-10 space-y-6 sm:space-y-8 lg:space-y-10">
               {/* Header Section */}
               <div className="space-y-3 sm:space-y-4 lg:space-y-6">
                 <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 mb-4">
-                  <span className="text-xs sm:text-sm font-medium text-primary">🚀 Launch Ready</span>
+                  <span className="text-xs sm:text-sm font-medium text-primary">Prelaunch access</span>
                 </div>
                 <h2 id="final-cta-heading" className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold font-inter text-contrast leading-tight">
                   Ready to Start Your
@@ -60,9 +60,9 @@ const FinalCTA = () => {
                   </span>
                 </h2>
                 <p className="text-base sm:text-lg lg:text-xl text-contrast-secondary font-inter max-w-3xl mx-auto leading-relaxed">
-                  Join thousands of travelers discovering authentic Thailand with local companions. 
+                  Get the app to explore local experiences, or join the early access list while testing is by invitation.
                   <span className="block mt-2 text-sm sm:text-base text-primary font-medium">
-                    Be among the first to experience the future of travel.
+                    Guide applications are open now. App testing is by invitation.
                   </span>
                 </p>
               </div>
@@ -88,7 +88,7 @@ const FinalCTA = () => {
                     </div>
                   </div>
                 </Link>
-                
+
                 <Link
                   to="/download"
                   className={`group glass-card hover-lift hover-glow transition-all duration-300 hover:scale-105 p-3 sm:p-4 rounded-2xl focus-ring will-change-transform hardware-accelerated ${
@@ -111,35 +111,25 @@ const FinalCTA = () => {
                 </Link>
               </div>
 
-              {/* Enhanced Trust Indicators */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
                 <div className="glass-card p-3 sm:p-4 rounded-xl hover:scale-105 transition-transform duration-300">
-                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 text-contrast-secondary">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-green-500 text-lg" aria-hidden="true">✓</span>
-                      <span className="text-sm sm:text-base font-medium">1000+</span>
-                    </div>
-                    <span className="text-xs sm:text-sm text-center">Verified Guides</span>
+                  <div className="text-contrast-secondary text-center space-y-1">
+                    <div className="text-sm sm:text-base font-medium text-contrast">Traveler access</div>
+                    <span className="text-xs sm:text-sm text-center">App testing by invitation</span>
                   </div>
                 </div>
-                
+
                 <div className="glass-card p-3 sm:p-4 rounded-xl hover:scale-105 transition-transform duration-300">
-                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 text-contrast-secondary">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-green-500 text-lg" aria-hidden="true">✓</span>
-                      <span className="text-sm sm:text-base font-medium">50k+</span>
-                    </div>
-                    <span className="text-xs sm:text-sm text-center">Happy Travelers</span>
+                  <div className="text-contrast-secondary text-center space-y-1">
+                    <div className="text-sm sm:text-base font-medium text-contrast">Guide intake</div>
+                    <span className="text-xs sm:text-sm text-center">Applications open</span>
                   </div>
                 </div>
-                
+
                 <div className="glass-card p-3 sm:p-4 rounded-xl hover:scale-105 transition-transform duration-300">
-                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 text-contrast-secondary">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-green-500 text-lg" aria-hidden="true">✓</span>
-                      <span className="text-sm sm:text-base font-medium">4.9★</span>
-                    </div>
-                    <span className="text-xs sm:text-sm text-center">App Store Rating</span>
+                  <div className="text-contrast-secondary text-center space-y-1">
+                    <div className="text-sm sm:text-base font-medium text-contrast">Marketplace policy</div>
+                    <span className="text-xs sm:text-sm text-center">Payments are not yet available</span>
                   </div>
                 </div>
               </div>
@@ -148,15 +138,17 @@ const FinalCTA = () => {
               <div className="pt-4 sm:pt-6 lg:pt-8">
                 <div className="glass-card p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
                   <p className="text-sm sm:text-base text-contrast-secondary mb-3 sm:mb-4">
-                    Can't wait for the app launch? 
+                    Ready to join before public rollout?
                   </p>
-                  <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-secondary text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:shadow-glow transition-all duration-300 hover:scale-105">
-                    <span className="flex items-center justify-center space-x-2">
-                      <span>Join Early Access</span>
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </span>
+                  <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-secondary text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:shadow-glow transition-all duration-300 hover:scale-105" asChild>
+                    <Link to="/apply">
+                      <span className="flex items-center justify-center space-x-2">
+                        <span>Apply as a Guide</span>
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </span>
+                    </Link>
                   </Button>
                 </div>
               </div>
