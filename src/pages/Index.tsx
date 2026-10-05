@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import StreamlinedHero from '@/components/StreamlinedHero';
 import CategoriesGrid from '@/components/CategoriesGrid';
@@ -10,8 +11,18 @@ import SEO from '@/components/SEO';
 import Footer from '@/components/Footer';
 
 const Index = () => {
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      const el = document.getElementById(hash);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen" role="main">
+    <div id="home" className="min-h-screen" role="main">
       <SEO 
         title="Tirak - Authentic Travel Experiences with Local Companions"
         description="Discover unique travel experiences with verified local companions. Connect with passionate guides who share their culture, stories, and hidden gems."

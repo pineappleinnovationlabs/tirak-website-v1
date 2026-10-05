@@ -150,13 +150,15 @@ const FinalCTA = () => {
                   <p className="text-sm sm:text-base text-contrast-secondary mb-3 sm:mb-4">
                     Can't wait for the app launch? 
                   </p>
-                  <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-secondary text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:shadow-glow transition-all duration-300 hover:scale-105">
-                    <span className="flex items-center justify-center space-x-2">
-                      <span>Join Early Access</span>
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </span>
+                  <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-secondary text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:shadow-glow transition-all duration-300 hover:scale-105" asChild>
+                    <Link to="/apply">
+                      <span className="flex items-center justify-center space-x-2">
+                        <span>Apply as a Guide</span>
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </span>
+                    </Link>
                   </Button>
                 </div>
               </div>

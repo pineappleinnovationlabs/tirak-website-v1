@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { startNewInterestAttempt, submitInterest } from '@/lib/core-intake';
 
 import SEO from '@/components/SEO';
 import StreamlinedHero from '@/components/StreamlinedHero';
@@ -52,38 +53,50 @@ const TirakLanding = () => {
 
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      toast({ title: 'Email required', description: 'Please enter a valid email.', variant: 'destructive' });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      toast({ title: 'Valid email required', description: 'Please enter a valid email address.', variant: 'destructive' });
       return;
     }
     setLoading(true);
     try {
-      const params = new URLSearchParams(location.search);
-      const meta: Record<string, string> = {};
-      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(k => {
-        const v = params.get(k);
-        if (v) meta[k] = v;
-      });
-      const payload = {
-        email,
-        name,
+      const result = await submitInterest({
+        email: email.trim(),
+        name: name.trim() || undefined,
         source: 'tirak_prelaunch',
-        referrer: typeof document !== 'undefined' ? document.referrer : '',
-        meta,
-      };
-
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Signup failed');
 
-      toast({ title: "You're on the list!", description: 'We will notify you at launch.' });
+      if (result.ok === false) {
+        if (result.code === 'payload_mismatch') {
+          startNewInterestAttempt();
+          const retryResult = await submitInterest({
+            email: email.trim(),
+            name: name.trim() || undefined,
+            source: 'tirak_prelaunch',
+          });
+          if (retryResult.ok === false) {
+            throw new Error(retryResult.error);
+          }
+
+          toast({
+            title: "You're on the list!",
+            description: `We will notify you at launch. Reference ID: ${retryResult.data.interestId}`,
+          });
+          setEmail('');
+          setName('');
+          return;
+        }
+        throw new Error(result.error);
+      }
+
+      toast({
+        title: "You're on the list!",
+        description: `We will notify you at launch. Reference ID: ${result.data.interestId}`,
+      });
       setEmail('');
       setName('');
-    } catch (err) {
-      toast({ title: 'Signup failed', description: 'Please try again or contact support.', variant: 'destructive' });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Please try again.';
+      toast({ title: 'Signup failed', description: msg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -120,67 +133,47 @@ const TirakLanding = () => {
             {/* Copy Section - Enhanced Mobile Typography */}
             <div className="space-y-4 sm:space-y-6 will-change-transform text-center lg:text-left">
               <h2 id="prelaunch-heading" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-inter text-contrast leading-tight">
-                Join the Pre‑Launch List
+                Be First to
+                <span className="gradient-text ml-2 block sm:inline">Experience Tirak</span>
               </h2>
-              <p className="text-base sm:text-lg md:text-xl text-contrast-secondary font-inter leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Be first to explore authentic Thailand with verified local companions. Early members get beta access and exclusive perks.
+              <p className="text-sm sm:text-base md:text-lg text-contrast-secondary font-inter leading-relaxed">
+                Join our pre-launch community. Get exclusive early access to curated local guides, beta features, and launch rewards.
               </p>
-              
-              {/* Enhanced Mobile Benefits List */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 sm:gap-4 text-sm text-contrast-secondary/80 max-w-md mx-auto lg:mx-0">
-                <div className="flex items-center space-x-2 p-2 rounded-lg bg-white/5">
-                  <span className="text-primary">✨</span>
-                  <span>Priority access</span>
-                </div>
-                <div className="flex items-center space-x-2 p-2 rounded-lg bg-white/5">
-                  <span className="text-primary">🎁</span>
-                  <span>Founder rewards</span>
-                </div>
-                <div className="flex items-center space-x-2 p-2 rounded-lg bg-white/5">
-                  <span className="text-primary">🤝</span>
-                  <span>Curated matching</span>
-                </div>
-                <div className="flex items-center space-x-2 p-2 rounded-lg bg-white/5">
-                  <span className="text-primary">🗺️</span>
-                  <span>Trip planning</span>
-                </div>
-              </div>
             </div>
 
-            {/* Form Section - Enhanced Mobile UX */}
-            <form onSubmit={handleSignup} className="glass-card p-4 sm:p-6 lg:p-8 rounded-2xl space-y-4 sm:space-y-6 max-w-md mx-auto lg:max-w-none">
-              <div className="space-y-4">
+            {/* Form Section */}
+            <form onSubmit={handleSignup} className="glass-card rounded-2xl p-4 sm:p-6 lg:p-8 space-y-4 max-w-md mx-auto lg:max-w-none">
+              <div className="space-y-3">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-contrast-secondary mb-2">
-                    Name (optional)
+                  <label htmlFor="landing-name" className="block text-xs sm:text-sm font-medium text-contrast mb-1">
+                    Your Name
                   </label>
-                  <Input 
-                    id="name" 
-                    value={name} 
-                    onChange={e => setName(e.target.value)} 
-                    placeholder="Your name" 
-                    autoComplete="name"
+                  <Input
+                    id="landing-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Somchai"
                     className="h-12 text-base"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-contrast-secondary mb-2">
-                    Email *
+                  <label htmlFor="landing-email" className="block text-xs sm:text-sm font-medium text-contrast mb-1">
+                    Email Address *
                   </label>
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    value={email} 
-                    onChange={e => setEmail(e.target.value)} 
-                    placeholder="you@example.com" 
-                    autoComplete="email" 
+                  <Input
+                    id="landing-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    autoComplete="email"
                     required
                     className="h-12 text-base"
                   />
                 </div>
               </div>
               
-              {/* Enhanced Mobile Button Layout */}
               <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
                 <Button 
                   type="submit" 
@@ -203,8 +196,8 @@ const TirakLanding = () => {
               </p>
             </form>
 
-            {/* Visual Card - Enhanced Mobile Design */}
-            <div className="glass-card rounded-2xl p-4 sm:p-6 lg:p-8 will-change-transform hardware-accelerated rotate-1 hover:rotate-0 transition-transform duration-300 max-w-md mx-auto lg:max-w-none">
+            {/* Visual Card */}
+            <div className="glass-card rounded-2xl p-4 sm:p-6 lg:p-8 will-change-transform rotate-1 hover:rotate-0 transition-transform duration-300 max-w-md mx-auto lg:max-w-none">
               <div className="space-y-3 sm:space-y-4 text-center">
                 <div className="text-xs sm:text-sm uppercase tracking-wide text-contrast-secondary font-medium">
                   Early Access
@@ -216,7 +209,6 @@ const TirakLanding = () => {
                   Limited spots • Verified companions • Real local vibes
                 </div>
                 
-                {/* Mobile-friendly stats */}
                 <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10">
                   <div className="text-center">
                     <div className="text-lg font-bold text-primary">500+</div>
@@ -237,12 +229,12 @@ const TirakLanding = () => {
         </div>
       </section>
       
-      {/* Explore by Vibe - Enhanced Section Spacing */}
+      {/* Explore by Vibe */}
       <section id="explore" className="py-12 md:py-16 lg:py-20" aria-label="Explore by vibe">
         <CategoriesGrid />
       </section>
       
-      {/* Testimonials - Enhanced Mobile Layout */}
+      {/* Testimonials */}
       <section id="companion-stories" className="py-12 md:py-16 lg:py-20" aria-labelledby="stories-heading">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
@@ -258,7 +250,7 @@ const TirakLanding = () => {
         <CompanionStories />
       </section>
       
-      {/* Vendor Onboarding - Enhanced Mobile Layout */}
+      {/* Vendor Onboarding */}
       <section id="for-guides" className="py-12 md:py-16 lg:py-20" aria-labelledby="guides-heading">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">

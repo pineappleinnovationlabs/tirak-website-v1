@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import { DataDeletion } from './pages/DataDeletion';
+import GuideApplication from './pages/GuideApplication';
 import NotFound from './pages/NotFound';
 import Header from '@/components/Header';
 
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/data-deletion" element={<DataDeletion />} />
+                  <Route path="/apply" element={<GuideApplication />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

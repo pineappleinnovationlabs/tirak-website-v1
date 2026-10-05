@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import { Calendar, MessageCircle, Star, Play, Users, DollarSign, TrendingUp } from 'lucide-react';
 
 const features = [
@@ -73,10 +74,13 @@ const ForLocalGuides = () => {
               <Button 
                 size="lg" 
                 className="group bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 will-change-transform hardware-accelerated"
+                asChild
                 aria-label="Start earning as a local guide"
               >
-                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                Start Earning Today
+                <Link to="/apply">
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  Start Earning Today
+                </Link>
               </Button>
             </div>
           </div>
@@ -181,9 +185,12 @@ const ForLocalGuides = () => {
           <Button 
             size="lg" 
             className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white rounded-xl font-semibold"
+            asChild
           >
-            <TrendingUp className="w-5 h-5 mr-2" />
-            Get Started
+            <Link to="/apply">
+              <TrendingUp className="w-5 h-5 mr-2" />
+              Get Started
+            </Link>
           </Button>
         </div>
       </div>

@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AdaptiveLogo from './AdaptiveLogo';
 import ThemeToggle from './ThemeToggle';
 
+const NAV_ITEMS = [
+  { label: 'Home', hash: 'home' },
+  { label: 'Explore', hash: 'explore' },
+  { label: 'Stories', hash: 'companion-stories' },
+  { label: 'For Guides', hash: 'for-guides' },
+] as const;
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +24,18 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleAnchorClick = useCallback((hash: string) => {
+    if (location.pathname === '/') {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        window.history.replaceState(null, '', `#${hash}`);
+      }
+    } else {
+      navigate({ pathname: '/', hash });
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <header 
@@ -40,31 +61,22 @@ const Header = () => {
 
           {/* Navigation Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {[
-              { label: 'Home', href: '#home' },
-              { label: 'Explore', href: '#explore' },
-              { label: 'Stories', href: '#companion-stories' },
-              { label: 'For Guides', href: '#for-guides' },
-              { label: 'Contact', href: '/contact' }
-            ].map((item) => (
-              item.href.startsWith('#') ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="magnetic text-contrast hover:text-primary font-medium transition-colors focus-ring relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className="magnetic text-contrast hover:text-primary font-medium transition-colors focus-ring relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {item.label}
-                </Link>
-              )
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => handleAnchorClick(item.hash)}
+                className="magnetic text-contrast hover:text-primary font-medium transition-colors focus-ring relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+              >
+                {item.label}
+              </button>
             ))}
+            <Link
+              to="/contact"
+              className="magnetic text-contrast hover:text-primary font-medium transition-colors focus-ring relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+            >
+              Contact
+            </Link>
             <ThemeToggle />
           </div>
 
