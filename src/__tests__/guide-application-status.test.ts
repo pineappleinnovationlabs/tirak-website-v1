@@ -22,6 +22,14 @@ describe('GuideApplication status helpers', () => {
     expect(content.detail).toContain('send a new invitation');
   });
 
+  it('active account no longer asks for an invitation after activation', () => {
+    const content = getAccountProvisioningContent('active', 'failed');
+
+    expect(content.label).toBe('Active');
+    expect(content.detail).toContain('account is active');
+    expect(content.detail).not.toContain('send a new invitation');
+  });
+
   it('missing publication data never claims services are active', () => {
     const content = getPublicationStatusContent(undefined);
 

@@ -147,7 +147,13 @@ export function getAccountProvisioningContent(
       detail: invitationDetail || 'Account setup is in progress. Watch for an onboarding update from Tirak.',
     };
   }
-  if (normalized === 'active' || normalized === 'provisioned') {
+  if (normalized === 'active') {
+    return {
+      label: 'Active',
+      detail: 'Your account is active. Continue managing your profile and services in the app.',
+    };
+  }
+  if (normalized === 'provisioned') {
     return {
       label: normalized === 'provisioned' ? 'Provisioned' : 'Active',
       detail: invitationDetail || 'The account exists and can continue onboarding in the app.',
