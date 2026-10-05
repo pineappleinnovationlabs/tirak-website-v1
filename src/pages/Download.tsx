@@ -56,7 +56,7 @@ const Download = () => {
     <main className="min-h-screen bg-background flex flex-col">
       <SEO
         title="Download Tirak App — Available on iOS & Android"
-        description="Download the Tirak mobile app to discover authentic local experiences in Thailand and connect with trusted companions."
+        description="Get the Tirak app to discover local guides and experiences. Join the early access list while testing is by invitation."
       />
 
       <section className="flex-1 flex items-center justify-center py-16 px-4">
@@ -70,7 +70,7 @@ const Download = () => {
           </h1>
 
           <p className="text-contrast-secondary text-base sm:text-lg">
-            Experience the best of Thailand with curated local companions. Browse verified profiles, book experiences, and travel with confidence.
+            Install Tirak to follow the staged rollout, access discovery previews, and receive updates when approved companion inventory becomes available in-app.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
@@ -101,11 +101,11 @@ const Download = () => {
 
           <div className="pt-4 text-xs text-contrast-secondary space-y-1">
             <p>
-              Direct install link not opening? Choose your platform above or view our{" "}
-              <Link to="/#faq" className="underline underline-offset-4 hover:text-foreground">
-                installation guide
+              Direct install link not opening? Choose your platform above, contact support, or open the{" "}
+              <Link to="/apply" className="underline underline-offset-4 hover:text-foreground">
+                guide application
               </Link>
-              .
+              if you are onboarding as a local operator.
             </p>
           </div>
         </div>

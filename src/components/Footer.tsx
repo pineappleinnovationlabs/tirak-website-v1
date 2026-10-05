@@ -7,15 +7,15 @@ const Footer = () => {
   return (
     <footer className="relative bg-card border-t border-border">
       <div className="absolute inset-0 glass-light"></div>
-      
+
       <div className="relative container mx-auto px-6 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <AdaptiveLogo 
-                size="md" 
+              <AdaptiveLogo
+                size="md"
                 variant="contrast"
                 className="transition-transform duration-300 hover:scale-105"
               />
@@ -24,13 +24,12 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-contrast-secondary text-sm leading-relaxed max-w-md">
-              Connect with verified local companions in Thailand. Discover authentic experiences, 
-              explore hidden gems, and create unforgettable memories with trusted local guides.
+              Discover Thailand through local knowledge and shared experiences. Join early access or apply as a local guide.
             </p>
             <div className="flex space-x-4 mt-6">
               {/* Social Media Links */}
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 transform"
                 aria-label="Facebook"
               >
@@ -38,8 +37,8 @@ const Footer = () => {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 transform"
                 aria-label="Instagram"
               >
@@ -47,8 +46,8 @@ const Footer = () => {
                   <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987c6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297L3.182 17.635l1.944-1.944c-.807-.875-1.297-2.026-1.297-3.323s.49-2.448 1.297-3.323L3.182 7.101l1.944-1.944c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297l1.944 1.944-1.944 1.944c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323l1.944 1.944-1.944 1.944c-.875.807-2.026 1.297-3.323 1.297z"/>
                 </svg>
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 transform"
                 aria-label="Twitter"
               >
@@ -66,32 +65,32 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link 
-                  to="/" 
+                <Link
+                  to="/"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Home
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/companions" 
+                <Link
+                  to="/download"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
-                  Find Companions
+                  Get the App
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/download" 
+                <Link
+                  to="/download"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Download App
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/contact"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Contact Us
@@ -107,32 +106,32 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link 
-                  to="/privacy" 
+                <Link
+                  to="/privacy"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/terms" 
+                <Link
+                  to="/terms"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:support@tirak.com" 
+                <a
+                  href="mailto:support@tirak.com"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Support
                 </a>
               </li>
               <li>
-                <Link 
-                  to="/data-deletion" 
+                <Link
+                  to="/data-deletion"
                   className="text-contrast-secondary hover:text-primary transition-colors duration-200 text-sm hover:translate-x-1 transform inline-block"
                 >
                   Data Deletion
@@ -149,20 +148,20 @@ const Footer = () => {
               © {currentYear} Tirak. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
-              <Link 
-                to="/privacy" 
+              <Link
+                to="/privacy"
                 className="text-contrast-secondary hover:text-primary transition-colors duration-200"
               >
                 Privacy
               </Link>
-              <Link 
-                to="/terms" 
+              <Link
+                to="/terms"
                 className="text-contrast-secondary hover:text-primary transition-colors duration-200"
               >
                 Terms
               </Link>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/contact"
                 className="text-contrast-secondary hover:text-primary transition-colors duration-200"
               >
                 Contact

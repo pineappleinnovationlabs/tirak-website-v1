@@ -146,7 +146,7 @@ const StreamlinedHero = () => {
                 Experience Thailand with Local Guides
               </h1>
               <p className="text-contrast-secondary text-lg sm:text-xl max-w-xl">
-                Discover genuine cultural insights, curated adventures, and unforgettable experiences across Thailand with trusted local companions.
+                Discover local culture, food, and adventures. Join early access while app testing is by invitation.
               </p>
             </div>
 
@@ -231,7 +231,7 @@ const StreamlinedHero = () => {
 
                     <div className="pt-2 sm:pt-4">
                       <Link to="/download" className="block bg-white text-primary rounded-lg sm:rounded-xl py-2 sm:py-3 px-4 sm:px-6 text-center font-semibold text-sm sm:text-base">
-                        Find Your Guide
+                        Get the App
                       </Link>
                     </div>
                   </div>

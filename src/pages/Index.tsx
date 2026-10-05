@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Header from '@/components/Header';
 import StreamlinedHero from '@/components/StreamlinedHero';
 import CategoriesGrid from '@/components/CategoriesGrid';
 import FeaturedCompanions from '@/components/FeaturedCompanions';
@@ -25,12 +24,10 @@ const Index = () => {
     <div id="home" className="min-h-screen" role="main">
       <SEO 
         title="Tirak - Authentic Travel Experiences with Local Companions"
-        description="Discover unique travel experiences with verified local companions. Connect with passionate guides who share their culture, stories, and hidden gems."
+        description="Discover Tirak's upcoming Thailand travel marketplace, join the app rollout, and apply for future guide access through the official intake flow."
         canonical="/"
       />
-      {/* Sticky Header */}
-      <Header />
-      
+
       {/* Hero Section */}
       <StreamlinedHero />
       

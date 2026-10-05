@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 const NAV_ITEMS = [
   { label: 'Home', hash: 'home' },
   { label: 'Explore', hash: 'explore' },
-  { label: 'Stories', hash: 'companion-stories' },
+  { label: 'About Tirak', hash: 'companion-stories' },
   { label: 'For Guides', hash: 'for-guides' },
 ] as const;
 

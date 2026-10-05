@@ -13,6 +13,7 @@ import Terms from './pages/Terms';
 import { DataDeletion } from './pages/DataDeletion';
 import GuideApplication from './pages/GuideApplication';
 import NotFound from './pages/NotFound';
+import Companions from './pages/Companions';
 import Header from '@/components/Header';
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/data-deletion" element={<DataDeletion />} />
                   <Route path="/apply" element={<GuideApplication />} />
+                  <Route path="/companions" element={<Companions />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

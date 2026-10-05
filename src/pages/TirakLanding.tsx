@@ -104,14 +104,14 @@ const TirakLanding = () => {
 
   return (
     <main className="bg-sunset min-h-screen text-foreground" role="main">
-      <SEO 
+      <SEO
         title="Tirak - Connect with Local Travel Companions in Thailand"
-        description="Experience Thailand through the eyes of locals. Find verified companions for authentic adventures, cultural immersion, and unforgettable travel memories."
+        description="Join Tirak's prelaunch rollout for Thailand travel discovery, app access, and future companion inventory once approved listings are ready."
         canonical="/tirak"
       />
       {/* Hero */}
       <StreamlinedHero />
-      
+
       {/* Pre-Launch Signup - Enhanced Mobile Responsive */}
       <section id="prelaunch" className="py-12 md:py-16 lg:py-20" aria-labelledby="prelaunch-heading">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -137,7 +137,7 @@ const TirakLanding = () => {
                 <span className="gradient-text ml-2 block sm:inline">Experience Tirak</span>
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-contrast-secondary font-inter leading-relaxed">
-                Join our pre-launch community. Get exclusive early access to curated local guides, beta features, and launch rewards.
+                Join the prelaunch list for app access, rollout updates, and future companion discovery once approved inventory is ready.
               </p>
             </div>
 
@@ -173,19 +173,19 @@ const TirakLanding = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
-                <Button 
-                  type="submit" 
-                  className="btn-primary w-full sm:w-auto h-12 px-6 text-base font-semibold" 
+                <Button
+                  type="submit"
+                  className="btn-primary w-full sm:w-auto h-12 px-6 text-base font-semibold"
                   disabled={loading}
                 >
                   {loading ? 'Signing up…' : 'Notify Me'}
                 </Button>
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  className="btn-ghost w-full sm:w-auto h-12 px-6 text-base" 
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="btn-ghost w-full sm:w-auto h-12 px-6 text-base"
                   onClick={() => navigate('/download')}
                 >
                   Prefer to download?
@@ -206,21 +206,21 @@ const TirakLanding = () => {
                   Beta Launch
                 </div>
                 <div className="text-xs sm:text-sm text-contrast-secondary leading-relaxed">
-                  Limited spots • Verified companions • Real local vibes
+                  App rollout • Approved listings only • No public dummy inventory
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10">
                   <div className="text-center">
-                    <div className="text-lg font-bold text-primary">500+</div>
-                    <div className="text-xs text-contrast-secondary">Companions</div>
+                    <div className="text-lg font-bold text-primary">Waitlist</div>
+                    <div className="text-xs text-contrast-secondary">Join in app</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg font-bold text-primary">50+</div>
-                    <div className="text-xs text-contrast-secondary">Cities</div>
+                    <div className="text-lg font-bold text-primary">Guides</div>
+                    <div className="text-xs text-contrast-secondary">Apply for review</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg font-bold text-primary">24/7</div>
-                    <div className="text-xs text-contrast-secondary">Support</div>
+                    <div className="text-lg font-bold text-primary">Access</div>
+                    <div className="text-xs text-contrast-secondary">Cohort based</div>
                   </div>
                 </div>
               </div>
@@ -228,28 +228,28 @@ const TirakLanding = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Explore by Vibe */}
       <section id="explore" className="py-12 md:py-16 lg:py-20" aria-label="Explore by vibe">
         <CategoriesGrid />
       </section>
-      
+
       {/* Testimonials */}
       <section id="companion-stories" className="py-12 md:py-16 lg:py-20" aria-labelledby="stories-heading">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 id="stories-heading" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-inter text-contrast mb-4">
-              Stories from Our
-              <span className="gradient-text ml-2 block sm:inline">Early Explorers</span>
+              How Tirak
+              <span className="gradient-text ml-2 block sm:inline">Is Rolling Out</span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-contrast-secondary font-inter max-w-2xl mx-auto">
-              Real experiences from travelers who've discovered Thailand's hidden gems
+              Explore the app, join early access, or start your guide application
             </p>
           </div>
         </div>
         <CompanionStories />
       </section>
-      
+
       {/* Vendor Onboarding */}
       <section id="for-guides" className="py-12 md:py-16 lg:py-20" aria-labelledby="guides-heading">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -265,10 +265,10 @@ const TirakLanding = () => {
         </div>
         <ForLocalGuides />
       </section>
-      
+
       {/* Final CTA */}
       <FinalCTA />
-      
+
       {/* Footer */}
       <Footer />
     </main>
