@@ -73,6 +73,179 @@ type RecoveryNotice = {
   description: string;
 };
 
+type StatusCardContent = {
+  label: string;
+  detail: string;
+};
+
+function normalizeStatusValue(value?: string): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const normalized = value.trim();
+  return normalized.length > 0 ? normalized.toLowerCase() : undefined;
+}
+
+function toTitleLabel(value: string): string {
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+export function getApplicationReviewContent(status?: string): StatusCardContent {
+  const normalized = normalizeStatusValue(status);
+
+  if (normalized === 'approved') {
+    return { label: 'Approved', detail: 'Application approved by Tirak administration.' };
+  }
+  if (normalized === 'rejected') {
+    return { label: 'Rejected', detail: 'Application not approved at this time.' };
+  }
+  if (normalized === 'pending') {
+    return { label: 'Pending Review', detail: 'Pending manual admin review.' };
+  }
+  if (!normalized) {
+    return {
+      label: 'Unknown',
+      detail: 'Application review status is unavailable until the server reports it.',
+    };
+  }
+
+  return {
+    label: toTitleLabel(normalized),
+    detail: 'Application review status updated by the server.',
+  };
+}
+
+export function getAccountProvisioningContent(
+  accountStatus?: string,
+  invitationStatus?: string
+): StatusCardContent {
+  const normalized = normalizeStatusValue(accountStatus);
+  const invitation = normalizeStatusValue(invitationStatus);
+
+  const invitationDetail = (() => {
+    if (invitation === 'accepted') {
+      return 'Invitation provider accepted the send request, but email delivery is still unconfirmed.';
+    }
+    if (invitation === 'failed') {
+      return 'The invitation could not be sent. Confirm the email address and ask Tirak to send a new invitation.';
+    }
+    if (invitation) {
+      return 'Invitation delivery status is reported but not yet confirmed.';
+    }
+    return '';
+  })();
+
+  if (normalized === 'application_not_provisioned' || normalized === 'not_provisioned') {
+    return {
+      label: 'Not Provisioned',
+      detail: 'No Tirak account has been created yet. This remains blocked until the application is approved.',
+    };
+  }
+  if (normalized === 'pending') {
+    return {
+      label: 'Pending',
+      detail: invitationDetail || 'Account setup is in progress. Watch for an onboarding update from Tirak.',
+    };
+  }
+  if (normalized === 'active' || normalized === 'provisioned') {
+    return {
+      label: normalized === 'provisioned' ? 'Provisioned' : 'Active',
+      detail: invitationDetail || 'The account exists and can continue onboarding in the app.',
+    };
+  }
+  if (normalized === 'suspended') {
+    return {
+      label: 'Suspended',
+      detail: 'The account is suspended. Contact Tirak before attempting to publish services.',
+    };
+  }
+  if (!normalized) {
+    return {
+      label: 'Unknown',
+      detail: invitationDetail || 'Account provisioning status is unavailable until the server reports it.',
+    };
+  }
+
+  return {
+    label: toTitleLabel(normalized),
+    detail: invitationDetail || 'Account provisioning status updated by the server.',
+  };
+}
+
+export function getProfileVerificationContent(profileStatus?: string): StatusCardContent {
+  const normalized = normalizeStatusValue(profileStatus);
+
+  if (normalized === 'none' || normalized === 'profile_none' || normalized === 'profilenone') {
+    return { label: 'None', detail: 'No verified guide profile is available yet.' };
+  }
+  if (normalized === 'pending' || normalized === 'verification_pending') {
+    return {
+      label: 'Pending Verification',
+      detail: 'ID verification and credential review are still in progress.',
+    };
+  }
+  if (normalized === 'verified') {
+    return { label: 'Verified', detail: 'Profile verification is complete.' };
+  }
+  if (normalized === 'rejected') {
+    return {
+      label: 'Rejected',
+      detail: 'Profile verification was not approved. Review blockers and resubmit the required items.',
+    };
+  }
+  if (!normalized) {
+    return {
+      label: 'Unknown',
+      detail: 'Profile verification status is unavailable until the server reports it.',
+    };
+  }
+
+  return {
+    label: toTitleLabel(normalized),
+    detail: 'Profile verification status updated by the server.',
+  };
+}
+
+export function getPublicationStatusContent(publicationStatus?: string): StatusCardContent {
+  const normalized = normalizeStatusValue(publicationStatus);
+
+  if (normalized === 'awaiting_approval') {
+    return {
+      label: 'Awaiting Approval',
+      detail: 'Services are waiting for approval before they can be activated.',
+    };
+  }
+  if (normalized === 'blocked') {
+    return {
+      label: 'Blocked',
+      detail: 'Publication is blocked until account, profile, or service issues are resolved.',
+    };
+  }
+  if (normalized === 'draft' || normalized === 'inactive') {
+    return {
+      label: 'Draft',
+      detail: 'Services are saved as drafts. The owner activates them after verification.',
+    };
+  }
+  if (normalized === 'active') {
+    return {
+      label: 'Active',
+      detail: 'At least one service is active and available to travelers.',
+    };
+  }
+  if (!normalized) {
+    return {
+      label: 'Unknown',
+      detail: 'Publication status is unavailable. No service should be assumed active.',
+    };
+  }
+
+  return {
+    label: toTitleLabel(normalized),
+    detail: 'Publication status updated by the server.',
+  };
+}
+
 export default function GuideApplication() {
   const { toast } = useToast();
 
@@ -356,6 +529,13 @@ export default function GuideApplication() {
   ]);
 
   const attemptRecovery = useMemo(() => getApplicationAttemptRecovery(currentPayload), [currentPayload]);
+  const applicationReviewContent = getApplicationReviewContent(statusDetails?.status || receipt?.status);
+  const accountProvisioningContent = getAccountProvisioningContent(
+    statusDetails?.accountStatus,
+    statusDetails?.invitationDelivery?.status
+  );
+  const profileVerificationContent = getProfileVerificationContent(statusDetails?.profileStatus);
+  const publicationStatusContent = getPublicationStatusContent(statusDetails?.publicationStatus);
 
   // Autosave draft
   useEffect(() => {
@@ -1004,49 +1184,41 @@ export default function GuideApplication() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl bg-muted/40 border border-border">
                   <span className="text-xs uppercase font-medium text-contrast-secondary">Application Review</span>
-                  <p className="text-lg font-bold capitalize mt-1 text-contrast">
-                    {statusDetails?.status || receipt.status}
+                  <p className="text-lg font-bold mt-1 text-contrast">
+                    {applicationReviewContent.label}
                   </p>
                   <p className="text-xs text-contrast-secondary mt-1">
-                    {statusDetails?.status === 'approved'
-                      ? 'Application approved by Tirak administration.'
-                      : statusDetails?.status === 'rejected'
-                      ? 'Application not approved at this time.'
-                      : 'Pending manual admin review.'}
+                    {applicationReviewContent.detail}
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-muted/40 border border-border">
                   <span className="text-xs uppercase font-medium text-contrast-secondary">Account Provisioning</span>
-                  <p className="text-lg font-bold capitalize mt-1 text-contrast">
-                    {statusDetails?.accountStatus || 'Unknown'}
+                  <p className="text-lg font-bold mt-1 text-contrast">
+                    {accountProvisioningContent.label}
                   </p>
                   <p className="text-xs text-contrast-secondary mt-1">
-                    {statusDetails?.invitationDelivery?.status === 'accepted'
-                      ? 'Account invitation delivered. Check email for secure activation link.'
-                      : statusDetails?.accountStatus
-                      ? 'Account status updated.'
-                      : 'Awaiting server update.'}
+                    {accountProvisioningContent.detail}
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-muted/40 border border-border">
                   <span className="text-xs uppercase font-medium text-contrast-secondary">Profile Verification</span>
-                  <p className="text-lg font-bold capitalize mt-1 text-contrast">
-                    {statusDetails?.profileStatus || 'Unknown'}
+                  <p className="text-lg font-bold mt-1 text-contrast">
+                    {profileVerificationContent.label}
                   </p>
                   <p className="text-xs text-contrast-secondary mt-1">
-                    ID verification and credential review required before public listing.
+                    {profileVerificationContent.detail}
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-muted/40 border border-border">
                   <span className="text-xs uppercase font-medium text-contrast-secondary">Publication & Booking</span>
-                  <p className="text-lg font-bold capitalize mt-1 text-contrast">
-                    {statusDetails?.publicationStatus || 'Unknown'}
+                  <p className="text-lg font-bold mt-1 text-contrast">
+                    {publicationStatusContent.label}
                   </p>
                   <p className="text-xs text-contrast-secondary mt-1">
-                    Services remain inactive drafts until explicit owner activation.
+                    {publicationStatusContent.detail}
                   </p>
                 </div>
               </div>

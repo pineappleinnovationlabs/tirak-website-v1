@@ -164,9 +164,9 @@ const validStatusResponse = {
   data: {
     applicationId: 'app-abc-123',
     status: 'approved',
-    accountStatus: 'provisioned',
-    profileStatus: 'verification_pending',
-    publicationStatus: 'inactive',
+    accountStatus: 'active',
+    profileStatus: 'pending',
+    publicationStatus: 'draft',
     expiresAt: '2026-11-05T00:00:00.000Z',
     blockers: ['profile_setup_pending'],
     evidence: [{ evidenceId: 'ev-999', kind: 'id_front' }],
@@ -530,9 +530,9 @@ describe('checkStatus', () => {
     expect(result.ok).toBe(true);
     if (result.ok === true) {
       expect(result.data.status).toBe('approved');
-      expect(result.data.accountStatus).toBe('provisioned');
-      expect(result.data.profileStatus).toBe('verification_pending');
-      expect(result.data.publicationStatus).toBe('inactive');
+      expect(result.data.accountStatus).toBe('active');
+      expect(result.data.profileStatus).toBe('pending');
+      expect(result.data.publicationStatus).toBe('draft');
       expect(result.data.evidence?.[0].evidenceId).toBe('ev-999');
     }
   });
